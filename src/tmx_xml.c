@@ -217,7 +217,7 @@ static int parse_text(xmlTextReaderPtr reader, tmx_text *text) {
 		text->halign = parse_horizontal_align(value);
 		tmx_free_func(value);
 	}
-	
+
 	if ((value = (char*)xmlTextReaderGetAttribute(reader, (xmlChar*)"valign"))) { /* valign */
 		text->valign = parse_vertical_align(value);
 		tmx_free_func(value);
@@ -390,7 +390,9 @@ static int parse_data(xmlTextReaderPtr reader, int32_t **gidsadr, size_t gidscou
 	if (!strcmp(value, "base64")) {
 		tmx_free_func(value);
 		value = (char*)xmlTextReaderGetAttribute(reader, (xmlChar*)"compression"); /* compression */
-
+		if (strlen(value) == 0) {
+		  value = 0;
+		}
 		if (value && strcmp(value, "zlib") && strcmp(value, "gzip")) {
 			tmx_err(E_ENCCMP, "xml parser: unsupported data compression: '%s'", value); /* unsupported compression */
 			goto cleanup;
